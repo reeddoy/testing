@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js"
+        integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body {
+            background-color: #f0e68c; /* Yellow Dark background color */
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column; /* Column layout to align items from top to bottom */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 10px; /* Add padding to body */
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 20px; /* Add margin top to separate from h1 */
+            max-width: 90%; /* Limit main width */
+            overflow: hidden; /* Hide overflow to prevent horizontal scroll */
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 10px; /* Adjust top margin */
+        }
+
+        #reader {
+            width: 100%; /* Full width for mobile */
+            max-width: 600px; /* Limit maximum width */
+            aspect-ratio: 1/1; /* Maintain square aspect ratio */
+            background-color: #fff; /* White background for the scanner box */
+            border: 2px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #result {
+            text-align: center;
+            font-size: 1.2rem; /* Adjust font size for better readability on mobile */
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>TIXBEES QR SCANNER</h1> <!-- Move h1 to the top -->
+
+    <main>
+        <div id="reader"></div>
+        <div id="result"></div>
+    </main>
+
+    <a href="/qrcode_app/qr_dashboard" style="padding: 15px; margin-top: 20px; border-radius: 15px; background-color: black; color: white; text-decoration: none;"> Return Dashboard </a>
+
+    <script>
+        const scanner = new Html5QrcodeScanner('reader', {
+            qrbox: { width: 300, height: 300 }, // Adjust dimensions for better mobile usability
+            fps: 10, // Reduce frames per second for smoother performance on mobile
+        });
+
+        scanner.render(success, error);
+
+        // function success(result) {
+        //     document.getElementById('result').innerHTML = `
+        //         <h2>Success!</h2>
+        //         <p><a href="${result}" target="_blank">${result}</a></p>
+        //     `;
+        //     scanner.clear();
+        // }
+
+        
+        {% comment %} function success(result) {
+        window.location.href = result;
+        scanner.clear();
+        } {% endcomment %}
+
+
+        function success(result) {
+            try {
+                const allowedHost = window.location.hostname; // Replace with the part of the URL you want to check
+        
+                if (result.includes(allowedHost)) {
+                    window.location.href = result;
+                } else {
+                    alert("Invalid QR code URL.");
+                }
+            } catch (e) {
+                alert("Invalid URL format.");
+            }
+            scanner.clear();
+        }
+        
+
+        function error(err) {
+            console.error(err);
+        }
+    </script>
+</body>
+
+</html>
